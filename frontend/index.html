@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covy - Create Personalized Cover Letters</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="nav-logo">Covy - Write Cover Letters at Scale</h1>
+                <div class="nav-menu">
+                    <a href="#" class="nav-link" data-section="login" id="login-nav">Login</a>
+                    <a href="#" class="nav-link" data-section="profile" id="profile-nav" style="display: none;">Profile</a>
+                    <a href="#" class="nav-link" data-section="generate" id="generate-nav" style="display: none;">Generate</a>
+                    <a href="#" class="nav-link" data-section="history" id="history-nav" style="display: none;">History</a>
+                    <a href="#" class="nav-link" data-action="logout" id="logout-nav" style="display: none;">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Login Section -->
+        <section id="login" class="section active">
+            <div class="container">
+                <h2>Welcome to Covy</h2>
+                <p>Please enter your information to continue</p>
+                
+                <div class="card">
+                    <h3>Login / Register</h3>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-name">Full Name</label>
+                            <input type="text" id="login-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Continue</button>
+                    </form>
+                </div>
+                
+                <div id="login-status" class="card" style="display: none;">
+                    <h3>Login Status</h3>
+                    <p id="login-message"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Management Section -->
+        <section id="profile" class="section">
+            <div class="container">
+                <h2>Profile Management</h2>
+                <div id="user-info-display" class="card">
+                    <h3>User Information</h3>
+                    <p><strong>Name:</strong> <span id="display-name"></span></p>
+                    <p><strong>Email:</strong> <span id="display-email"></span></p>
+                </div>
+
+                <!-- CV Profile Form -->
+                <div class="card">
+                    <h3>CV Profile Details</h3>
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="summary">Professional Summary</label>
+                            <textarea id="summary" name="summary" rows="4" placeholder="Brief professional summary..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="skills">Skills (comma-separated)</label>
+                            <textarea id="skills" name="skills" rows="3" placeholder="JavaScript, Python, React, etc."></textarea>
+                        </div>
+
+                        <!-- Experience Section -->
+                        <div class="form-group">
+                            <label>Work Experience</label>
+                            <div id="experience-container">
+                                <div class="dynamic-section">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Company</label>
+                                            <input type="text" name="experience_company" placeholder="Company name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Position</label>
+                                            <input type="text" name="experience_position" placeholder="Job title">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Start Date</label>
+                                            <input type="month" name="experience_start_date">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>End Date</label>
+                                            <input type="month" name="experience_end_date">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <textarea name="experience_description" rows="3" placeholder="Job responsibilities and achievements..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="add-btn" id="add-experience-btn">+ Add Experience</button>
+                        </div>
+
+                        <!-- Education Section -->
+                        <div class="form-group">
+                            <label>Education</label>
+                            <div id="education-container">
+                                <div class="dynamic-section">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Institution</label>
+                                            <input type="text" name="education_institution" placeholder="University/School name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Degree</label>
+                                            <input type="text" name="education_degree" placeholder="Degree/Certification">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Start Date</label>
+                                            <input type="month" name="education_start_date">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>End Date</label>
+                                            <input type="month" name="education_end_date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="add-btn" id="add-education-btn">+ Add Education</button>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cover Letter Generation Section -->
+        <section id="generate" class="section">
+            <div class="container">
+                <h2>Generate Cover Letter</h2>
+                
+                <div class="generator-form">
+                    <form id="cover-letter-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="job-title">Job Title</label>
+                                <input type="text" id="job-title" name="job_title" required placeholder="e.g., Software Engineer">
+                            </div>
+                            <div class="form-group">
+                                <label for="company-name">Company Name</label>
+                                <input type="text" id="company-name" name="company_name" required placeholder="e.g., Google">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="job-description">Job Description</label>
+                            <textarea id="job-description" name="job_description" rows="12" 
+                                    placeholder="Paste the complete job description here..." required></textarea>
+                            <small>Character count: <span id="char-count">0</span></small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="generate-btn">
+                            <span class="btn-text">Generate Cover Letter</span>
+                        </button>
+                    </form>
+                </div>
+                
+                <div id="generated-letter" class="generated-content" style="display: none;">
+                    <h3>Generated Cover Letter</h3>
+                    <div class="letter-content">
+                        <textarea id="letter-text" placeholder="Your generated cover letter will appear here..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cover Letter History Section -->
+        <section id="history" class="section">
+            <div class="container">
+                <h2>Cover Letter History</h2>
+                
+                <div class="card">
+                    <h3>Your Saved Cover Letters</h3>
+                    
+                    <div id="letter-history" class="history-list">
+                        <div class="alert alert-info">
+                            <p>No cover letters found. Generate your first cover letter to see it here!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Alert container for notifications -->
+    <div id="alert-container" style="position: fixed; top: 100px; right: 20px; z-index: 1000; max-width: 400px;"></div>
+
+    <!-- Core Services -->
+    <script src="js/services/apiService.js"></script>
+    
+    <!-- State Management -->
+    <script src="js/state/appState.js"></script>
+    
+    <!-- Utilities -->
+    <script src="js/utils/helpers.js"></script>
+    
+    <!-- Components -->
+    <script src="js/components/authComponent.js"></script>
+    <script src="js/components/navigationComponent.js"></script>
+    <script src="js/components/profileComponent.js"></script>
+    <script src="js/components/coverLetterComponent.js"></script>
+    
+    <!-- Main Application -->
+    <script src="js/app.js"></script>
+</body>
+</html> 
