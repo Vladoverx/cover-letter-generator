@@ -10,11 +10,15 @@ A full-stack application for generating CVs and cover letters using AI.
 - Modern frontend interface
 
 ## Setup
+### Prerequisites
+- Google AI API key
+- Python 3.11
+- uv (package manager)
 
 1. Clone the repository
-2. Install dependencies: `pip install -r requirements.txt`
+2. Install dependencies: `uv sync`
 3. Set up environment variables inside the `backend/.env` file
-4. Run the application: `python backend/run.py`
+4. Run the application: `uv run backend/run.py`
 5. Run the frontend
 
 ## API Endpoints
