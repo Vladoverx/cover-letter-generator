@@ -25,6 +25,8 @@ class CVProfile(Base):
     experience = Column(JSON, nullable=True)  # Store as list of experience objects
     education = Column(JSON, nullable=True)  # Store as list of education objects
     
+    projects = Column(JSON, nullable=True)
+    
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

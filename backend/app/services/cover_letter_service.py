@@ -64,11 +64,19 @@ async def generate_cover_letter_content(cv_profile, request: CoverLetterGenerate
         
         prompt = _build_cover_letter_prompt(cv_summary, request)
 
+        # Ensure the API key is configured before attempting to call Gemini
+        if not settings.google_api_key:
+            logger.error("Google API key is missing; cannot generate cover letter content")
+            raise HTTPException(
+                status_code=500,
+                detail="Google API key is not configured on the server."
+            )
+
         client = genai.Client(api_key=settings.google_api_key)
         
         # Generate content using the client's models.generate_content method
         response = client.models.generate_content(
-            model='gemini-2.5-flash-preview-05-20',
+            model='gemini-2.5-flash',
             contents=prompt
         )
         
@@ -111,6 +119,11 @@ def _format_cv_for_prompt(cv_profile) -> str:
         experience_text = _format_experience_for_prompt(cv_profile.experience)
         if experience_text:
             cv_parts.append(f"Work Experience: {experience_text}")
+
+    if hasattr(cv_profile, 'projects') and cv_profile.projects:
+        projects_text = _format_projects_for_prompt(cv_profile.projects)
+        if projects_text:
+            cv_parts.append(f"Projects: {projects_text}")
     
     # Education
     if hasattr(cv_profile, 'education') and cv_profile.education:
@@ -176,6 +189,32 @@ def _format_experience_for_prompt(experience_data: List[dict]) -> str:
                 formatted_experience.append(" ".join(exp_parts))
     
     return "; ".join(formatted_experience)
+
+
+def _format_projects_for_prompt(projects_data: List[dict]) -> str:
+    """Format projects data for the prompt"""
+    if not projects_data:
+        return ""
+    
+    formatted_projects = []
+    for proj in projects_data:
+        if isinstance(proj, dict):
+            name = proj.get('name', '')
+            description = proj.get('description', '')
+            technologies = proj.get('technologies', '')
+
+            proj_parts = []
+            if name:
+                proj_parts.append(name)
+            if description:
+                proj_parts.append(f"- {description}")
+            if technologies:
+                proj_parts.append(f"Technologies: {technologies}")
+
+            if proj_parts:
+                formatted_projects.append(" ".join(proj_parts))
+    
+    return "; ".join(formatted_projects)
 
 
 def _format_education_for_prompt(education_data: List[dict]) -> str:

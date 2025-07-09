@@ -14,9 +14,11 @@ class ProfileComponent {
 
         // Dynamic section buttons
         const addExperienceBtn = document.getElementById('add-experience-btn');
+        const addProjectBtn = document.getElementById('add-project-btn');
         const addEducationBtn = document.getElementById('add-education-btn');
         
         addExperienceBtn?.addEventListener('click', () => this.addSection('experience'));
+        addProjectBtn?.addEventListener('click', () => this.addSection('projects'));
         addEducationBtn?.addEventListener('click', () => this.addSection('education'));
 
         // Use event delegation for remove buttons
@@ -70,6 +72,7 @@ class ProfileComponent {
             summary: formData.get('summary'),
             skills: DataHelpers.parseSkills(formData.get('skills')),
             experience: this.collectExperience(),
+            projects: this.collectProjects(),
             education: this.collectEducation()
         };
     }
@@ -106,6 +109,24 @@ class ProfileComponent {
         return FormHelpers.collectDynamicData('#experience-container', fieldMappings);
     }
 
+    collectProjects() {
+        const fieldMappings = {
+            name: '[name="project_name"]',
+            technologies: '[name="project_technologies"]',
+            description: '[name="project_description"]'
+        };
+
+        const projects = FormHelpers.collectDynamicData('#projects-container', fieldMappings);
+        
+        // Convert technologies string to array
+        return projects.map(project => ({
+            ...project,
+            technologies: project.technologies ? 
+                project.technologies.split(',').map(tech => tech.trim()).filter(Boolean) : 
+                []
+        }));
+    }
+
     collectEducation() {
         const fieldMappings = {
             degree: '[name="education_degree"]',
@@ -131,6 +152,7 @@ class ProfileComponent {
 
         // Populate dynamic sections
         this.populateExperience(profile.experience || []);
+        this.populateProjects(profile.projects || []);
         this.populateEducation(profile.education || []);
     }
 
@@ -148,6 +170,25 @@ class ProfileComponent {
             } else {
                 // Add new sections for additional items
                 const sectionHtml = FormBuilder.createSection('experience', exp);
+                container.insertAdjacentHTML('beforeend', sectionHtml);
+            }
+        });
+    }
+
+    populateProjects(projects) {
+        const container = document.getElementById('projects-container');
+        if (!container) return;
+
+        // Clear existing sections except the first one
+        this.clearDynamicSections(container);
+
+        projects.forEach((project, index) => {
+            if (index === 0) {
+                // Fill the first section
+                this.fillExistingSection(container.querySelector('.dynamic-section'), project, 'projects');
+            } else {
+                // Add new sections for additional items
+                const sectionHtml = FormBuilder.createSection('projects', project);
                 container.insertAdjacentHTML('beforeend', sectionHtml);
             }
         });
@@ -183,20 +224,31 @@ class ProfileComponent {
     fillExistingSection(section, data, type) {
         if (!section) return;
 
-        const fieldMappings = type === 'experience' 
-            ? {
+        let fieldMappings = {};
+        
+        if (type === 'experience') {
+            fieldMappings = {
                 '[name="experience_company"]': data.company,
                 '[name="experience_position"]': data.title,
                 '[name="experience_start_date"]': data.start_date,
                 '[name="experience_end_date"]': data.end_date,
                 '[name="experience_description"]': data.description
-            }
-            : {
+            };
+        } else if (type === 'projects') {
+            const technologies = Array.isArray(data.technologies) ? data.technologies.join(', ') : (data.technologies || '');
+            fieldMappings = {
+                '[name="project_name"]': data.name,
+                '[name="project_technologies"]': technologies,
+                '[name="project_description"]': data.description
+            };
+        } else if (type === 'education') {
+            fieldMappings = {
                 '[name="education_institution"]': data.institution,
                 '[name="education_degree"]': data.degree,
                 '[name="education_start_date"]': data.start_date,
                 '[name="education_end_date"]': data.end_date
             };
+        }
 
         Object.entries(fieldMappings).forEach(([selector, value]) => {
             const element = section.querySelector(selector);

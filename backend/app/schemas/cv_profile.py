@@ -29,6 +29,12 @@ class EducationSchema(BaseModel):
     grade: Optional[str] = None
     location: Optional[str] = None
 
+class ProjectSchema(BaseModel):
+    """Schema for personal/side project items"""
+    name: str
+    description: Optional[str] = None
+    technologies: Optional[List[str]] = None
+
 
 class CVProfileBase(BaseModel):
     full_name: Optional[str] = Field(None, max_length=255)
@@ -38,6 +44,7 @@ class CVProfileBase(BaseModel):
     summary: Optional[str] = None
     skills: Optional[List[SkillSchema]] = None
     experience: Optional[List[ExperienceSchema]] = None
+    projects: Optional[List[ProjectSchema]] = None
     education: Optional[List[EducationSchema]] = None
 
 

@@ -156,6 +156,7 @@ const FormBuilder = {
     createSection(type, content = {}) {
         const templates = {
             experience: this.experienceTemplate,
+            projects: this.projectsTemplate,
             education: this.educationTemplate
         };
         
@@ -190,6 +191,29 @@ const FormBuilder = {
                 <div class="form-group">
                     <label>Description</label>
                     <textarea name="experience_description" rows="3" placeholder="Job responsibilities and achievements...">${data.description || ''}</textarea>
+                </div>
+            </div>
+        `;
+    },
+
+    projectsTemplate(data = {}) {
+        const technologies = Array.isArray(data.technologies) ? data.technologies.join(', ') : (data.technologies || '');
+        return `
+            <div class="dynamic-section">
+                <button type="button" class="remove-btn">×</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Project Name</label>
+                        <input type="text" name="project_name" value="${data.name || ''}" placeholder="Project name">
+                    </div>
+                    <div class="form-group">
+                        <label>Technologies</label>
+                        <input type="text" name="project_technologies" value="${technologies}" placeholder="e.g., React, Node.js, MongoDB">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description (Optional)</label>
+                    <textarea name="project_description" rows="3" placeholder="Brief description of the project...">${data.description || ''}</textarea>
                 </div>
             </div>
         `;

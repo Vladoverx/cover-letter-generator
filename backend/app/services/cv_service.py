@@ -37,6 +37,9 @@ def create_cv_profile(db: Session, cv_profile: CVProfileCreate) -> CVProfile:
     
     if cv_profile.education:
         cv_profile_dict['education'] = [edu.model_dump() for edu in cv_profile.education]
+
+    if cv_profile.projects:
+        cv_profile_dict['projects'] = [proj.model_dump() for proj in cv_profile.projects]
     
     db_cv_profile = CVProfile(**cv_profile_dict)
     db.add(db_cv_profile)
@@ -50,7 +53,7 @@ def update_cv_profile(db: Session, cv_profile: CVProfile, cv_update: CVProfileUp
     update_data = cv_update.model_dump(exclude_unset=True)
     
     # Handle nested objects for JSON storage
-    for field in ['skills', 'experience', 'education']:
+    for field in ['skills', 'experience', 'education', 'projects']:
         if field in update_data and update_data[field] is not None:
             update_data[field] = [
                 item.model_dump() if hasattr(item, 'model_dump') else item 

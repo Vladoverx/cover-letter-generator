@@ -6,7 +6,8 @@ from .cv_profile import (
     CVProfileUpdate, 
     SkillSchema,
     ExperienceSchema,
-    EducationSchema
+    EducationSchema,
+    ProjectSchema
 )
 from .cover_letter import CoverLetter, CoverLetterCreate, CoverLetterUpdate, CoverLetterGenerate
 
@@ -20,7 +21,7 @@ __all__ = [
     "User", "UserCreate", "UserUpdate",
     # CV Profile schemas
     "CVProfile", "CVProfileCreate", "CVProfileUpdate",
-    "SkillSchema", "ExperienceSchema", "EducationSchema",
+    "SkillSchema", "ExperienceSchema", "EducationSchema", "ProjectSchema",
     # Cover Letter schemas
     "CoverLetter", "CoverLetterCreate", "CoverLetterUpdate", "CoverLetterGenerate"
 ] 
